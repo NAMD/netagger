@@ -8,8 +8,8 @@ import (
     "os"
 )
 
-func load_data(path string) map[string]string {
-    data := make(map[string]string)
+func load_data(path string) map[string]bool {
+    data := make(map[string]bool)
     fp, err := os.Open(path)
     if err != nil {
         log.Fatal(err)
@@ -26,8 +26,7 @@ func load_data(path string) map[string]string {
             log.Fatal("Line too long")
         }
 
-        word := string(line)
-        data[word] = word
+        data[string(line)] = true
     }
     return data
 }
