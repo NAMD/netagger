@@ -5,6 +5,7 @@ import (
     "io"
     "fmt"
     "log"
+    "strings"
     "os"
 )
 
@@ -33,7 +34,14 @@ func load_data(path string) map[string]bool {
 
 func main() {
     countries := load_data("KnownLists/en/known_country.lst")
-    for key, _ := range countries {
-        fmt.Println(key)
+
+    text := "The next world cup will be in Brazil."
+
+    tokens := strings.Split(text, " ")
+
+    for _, token := range tokens {
+        if _, exists := countries[token]; exists {
+            fmt.Println(token)
+        }
     }
 }
