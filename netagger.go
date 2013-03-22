@@ -29,6 +29,7 @@ func load_data(path string) map[string]bool {
 
         data[string(line)] = true
     }
+    fp.Close()
     return data
 }
 
