@@ -6,8 +6,9 @@ import (
     "io/ioutil"
     "fmt"
     "log"
-    "strings"
+    "path/filepath"
     "os"
+    "strings"
 )
 
 func open_file(path string) *os.File {
@@ -18,24 +19,26 @@ func open_file(path string) *os.File {
     return fp
 }
 
-func load_data(path string) map[string]bool {
+func load_data(paths []string) map[string]bool {
     data := make(map[string]bool)
-    fp := open_file(path)
-    bf := bufio.NewReader(fp)
-    for {
-        line, isPrefix, err := bf.ReadLine()
+    for _, path := range paths {
+        fp := open_file(path)
+        bf := bufio.NewReader(fp)
+        for {
+            line, isPrefix, err := bf.ReadLine()
 
-        if err == io.EOF {
-            break
+            if err == io.EOF {
+                break
+            }
+
+            if isPrefix {
+                log.Fatal("Line too long")
+            }
+
+            data[string(line)] = true
         }
-
-        if isPrefix {
-            log.Fatal("Line too long")
-        }
-
-        data[string(line)] = true
+        fp.Close()
     }
-    fp.Close()
     return data
 }
 
@@ -46,14 +49,16 @@ func get_text_from_file(path string) string {
 }
 
 func main() {
-    countries := load_data("KnownLists/en/known_country.lst")
+    entity_list_files, _ := filepath.Glob("KnownLists/en/*")
+
+    entities := load_data(entity_list_files)
 
     text := get_text_from_file("input.txt")
 
     tokens := strings.Split(text, " ")
 
     for _, token := range tokens {
-        if _, exists := countries[token]; exists {
+        if _, exists := entities[token]; exists {
             fmt.Println(token)
         }
     }
