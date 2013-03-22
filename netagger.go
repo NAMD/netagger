@@ -34,5 +34,5 @@ func load_data(path string) map[string]string {
 
 func main() {
     countries := load_data("KnownLists/en/known_country.lst")
-    fmt.Println(countries["Brasil"])
+    fmt.Println(countries["Brazil"])
 }
