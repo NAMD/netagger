@@ -41,7 +41,7 @@ func load_data(path string) map[string]bool {
 
 func get_text_from_file(path string) string {
     content, _ := ioutil.ReadFile(path)
-    text := strings.Replace(string(content), "\n", "", -1)
+    text := strings.TrimSpace(string(content))
     return text
 }
 
