@@ -3,18 +3,24 @@ package main
 import (
     "bufio"
     "io"
+    "io/ioutil"
     "fmt"
     "log"
     "strings"
     "os"
 )
 
-func load_data(path string) map[string]bool {
-    data := make(map[string]bool)
+func open_file(path string) *os.File {
     fp, err := os.Open(path)
     if err != nil {
         log.Fatal(err)
     }
+    return fp
+}
+
+func load_data(path string) map[string]bool {
+    data := make(map[string]bool)
+    fp := open_file(path)
     bf := bufio.NewReader(fp)
     for {
         line, isPrefix, err := bf.ReadLine()
@@ -33,10 +39,16 @@ func load_data(path string) map[string]bool {
     return data
 }
 
+func get_text_from_file(path string) string {
+    content, _ := ioutil.ReadFile(path)
+    text := strings.Replace(string(content), "\n", "", -1)
+    return text
+}
+
 func main() {
     countries := load_data("KnownLists/en/known_country.lst")
 
-    text := "The next world cup will be in Brazil."
+    text := get_text_from_file("input.txt")
 
     tokens := strings.Split(text, " ")
 
